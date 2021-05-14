@@ -1,4 +1,3 @@
-import { ModelService } from "./service/predict.service";
 import "dotenv/config";
 
 import { get } from "lodash";
