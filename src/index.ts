@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { get } from "lodash";
 
-import { Client } from "@line/bot-sdk";
+import { Client, Message, WebhookEvent } from "@line/bot-sdk";
 import bodyParser from "body-parser";
 import express from "express";
 import { FoodService } from "./services/food.service";
@@ -30,7 +30,7 @@ app.post("/webhook", async (req, res) => {
 
   try {
     const menu = await foodService.randomMenu();
-    const message = await messageService.getText(menu);
+    const message = await messageService.getText(event.source.roomId);
     await lineClient.replyMessage(replyToken, message);
   } catch (e) {
     console.error(e);
