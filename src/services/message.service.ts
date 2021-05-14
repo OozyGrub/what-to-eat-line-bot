@@ -9,7 +9,8 @@ export class MessageService {
   getBubble = (contents: string[]): Message => {
     return {
       type: "flex",
-      altText: "order วันนี้ วัน" + moment().locale("th").format("dddd"),
+      altText:
+        "order วันนี้ วัน" + moment().utcOffset(7).locale("th").format("dddd"),
       contents: {
         type: "bubble",
         size: "micro",
@@ -26,14 +27,14 @@ export class MessageService {
             },
             {
               type: "text",
-              text: moment().locale("th").format("dddd Do"),
+              text: moment().utcOffset(7).locale("th").format("dddd Do"),
               weight: "bold",
               size: "xxl",
               margin: "md"
             },
             {
               type: "text",
-              text: moment().locale("th").format("hh:mm"),
+              text: moment().utcOffset(7).locale("th").format("hh:mm"),
               size: "xs",
               color: "#aaaaaa",
               wrap: true
