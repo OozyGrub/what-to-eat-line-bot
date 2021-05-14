@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { get } from "lodash";
 
-import { Client, Message, WebhookEvent } from "@line/bot-sdk";
+import { Client } from "@line/bot-sdk";
 import bodyParser from "body-parser";
 import express from "express";
 import { FoodService } from "./services/food.service";
@@ -28,17 +28,19 @@ app.post("/webhook", async (req, res) => {
   const message = get(event, ["message", "text"]);
   const replyToken = get(event, "replyToken") as string;
 
-  try {
-    const menu = await foodService.randomMenu();
-    const message = await messageService.getText(JSON.stringify(event.source));
-    await lineClient.replyMessage(replyToken, message);
-  } catch (e) {
-    console.error(e);
-    await lineClient.broadcast({
-      type: "text",
-      text: "ERROR"
-    });
-    return res.sendStatus(400).send(e);
+  if (message === "กินไร") {
+    try {
+      const menu = await foodService.randomMenu();
+      const message = await messageService.getText(menu);
+      await lineClient.replyMessage(replyToken, message);
+    } catch (e) {
+      console.error(e);
+      await lineClient.broadcast({
+        type: "text",
+        text: "ERROR"
+      });
+      return res.sendStatus(400).send(e);
+    }
   }
 });
 
@@ -46,11 +48,11 @@ app.get("/", (req, res) => {
   return res.send("Hello World");
 });
 
-app.post("/what-to-eat", async (rea, res) => {
+app.post("/what-to-eat", async (req, res) => {
   try {
-    const menu = await foodService.randomMenu();
-    const message = await messageService.getText(menu);
-    await lineClient.pushMessage(process.env.ROOM_ID, message);
+    const menu = foodService.randomMenu();
+    const message = messageService.getBubble(menu);
+    await lineClient.pushMessage(process.env.GROUP_ID, message);
     return res.sendStatus(200);
   } catch (e) {
     console.error(e);
