@@ -31,7 +31,7 @@ app.post("/webhook", async (req, res) => {
   if (message === "กินไร") {
     try {
       const menu = await foodService.randomMenu();
-      const message = await messageService.getText(menu);
+      const message = messageService.getBubble(menu);
       await lineClient.replyMessage(replyToken, message);
     } catch (e) {
       console.error(e);
