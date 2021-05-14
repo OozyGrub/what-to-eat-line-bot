@@ -30,7 +30,7 @@ app.post("/webhook", async (req, res) => {
 
   try {
     const menu = await foodService.randomMenu();
-    const message = await messageService.getText(event.source.roomId);
+    const message = await messageService.getText(JSON.stringify(event.source));
     await lineClient.replyMessage(replyToken, message);
   } catch (e) {
     console.error(e);
