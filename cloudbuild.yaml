@@ -1,0 +1,25 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      ["build", "-t", "gcr.io/what-to-eat-line-bot/what-to-eat-line-bot", "."]
+  # Push the container image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/what-to-eat-line-bot/what-to-eat-line-bot"]
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "what-to-eat-line-bot",
+        "--image",
+        "gcr.io/what-to-eat-line-bot/what-to-eat-line-bot",
+        "--region",
+        "asia-southeast2-a",
+        "--platform",
+        "managed"
+      ]
+images:
+  - gcr.io/what-to-eat-line-bot/what-to-eat-line-bot
