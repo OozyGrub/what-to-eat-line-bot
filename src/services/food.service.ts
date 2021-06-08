@@ -1,29 +1,23 @@
 import { sampleSize } from "lodash";
+import { foodTable } from "../lib/airtable";
 
 export class FoodService {
-  menus = [
-    "ข้าวมันไก่ทอด",
-    "ข้าวมันไก่",
-    "ข้าวขาหมู",
-    "เย็นตาโฟ",
-    "สุกี้แห้ง",
-    "บะหมี่แห้ง",
-    "เล็กแห้ง",
-    "หมูกระเทียมไข่ดาว",
-    "เสต็กเนื้อ",
-    "กะเพราหมูกรอบ",
-    "โจ๊ก",
-    "ผัดไท",
-    "ข้าวหน้าไก่",
-    "ยำมาม่า",
-    "กะเพราหมูกรอบ",
-    "ก๋วยจั๋บญวน",
-    "ข้ามหมูแดง",
-    "ก๋วยจั๋ยน้ำใส",
-    "ก๋วยจั๋บน้ำใส"
-  ];
+  foodTable;
+  constructor() {
+    this.foodTable = foodTable;
+  }
 
-  randomMenu = (size = 3) => {
-    return sampleSize(this.menus, size);
-  };
+  async getMenus(): Promise<string[]> {
+    try {
+      const records = await foodTable.select().all();
+      return records.map((record) => record.get("Name")) as string[];
+    } catch {
+      throw new Error("Can't get menu");
+    }
+  }
+
+  async randomMenu(size = 3): Promise<string[]> {
+    const menu = await this.getMenus();
+    return sampleSize(menu, size);
+  }
 }

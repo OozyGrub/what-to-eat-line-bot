@@ -23,25 +23,25 @@ export class MessageService {
               text: "ORDER",
               weight: "bold",
               color: "#1DB446",
-              size: "sm"
+              size: "sm",
             },
             {
               type: "text",
               text: moment().utcOffset(7).locale("th").format("dddd Do"),
               weight: "bold",
               size: "xxl",
-              margin: "md"
+              margin: "md",
             },
             {
               type: "text",
               text: moment().utcOffset(7).locale("th").format("hh:mm"),
               size: "xs",
               color: "#aaaaaa",
-              wrap: true
+              wrap: true,
             },
             {
               type: "separator",
-              margin: "xxl"
+              margin: "xxl",
             },
             {
               type: "box",
@@ -57,26 +57,26 @@ export class MessageService {
                     text: content,
                     size: "sm",
                     color: "#555555",
-                    flex: 0
+                    flex: 0,
                   },
                   {
                     type: "text",
                     size: "sm",
                     color: "#111111",
                     align: "end",
-                    text: " "
-                  }
-                ]
-              }))
-            }
-          ]
+                    text: " ",
+                  },
+                ],
+              })),
+            },
+          ],
         },
         styles: {
           footer: {
-            separator: true
-          }
-        }
-      }
+            separator: true,
+          },
+        },
+      },
     };
   };
 }

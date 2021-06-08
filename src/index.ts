@@ -1,10 +1,8 @@
-import "dotenv/config";
-
-import { get } from "lodash";
-
 import { Client } from "@line/bot-sdk";
 import bodyParser from "body-parser";
+import "dotenv/config";
 import express from "express";
+import { get } from "lodash";
 import { FoodService } from "./services/food.service";
 import { MessageService } from "./services/message.service";
 
@@ -15,7 +13,7 @@ const port = process.env.PORT || 8080;
 
 // Init LINE SDK
 const lineClient = new Client({
-  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN
+  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
 });
 
 const foodService = new FoodService();
@@ -37,7 +35,7 @@ app.post("/webhook", async (req, res) => {
       console.error(e);
       await lineClient.broadcast({
         type: "text",
-        text: "ERROR"
+        text: "ERROR",
       });
       return res.sendStatus(400).send(e);
     }
@@ -45,12 +43,12 @@ app.post("/webhook", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  return res.send("Hello World");
+  return res.send("Hello World!");
 });
 
 app.post("/what-to-eat", async (req, res) => {
   try {
-    const menu = foodService.randomMenu();
+    const menu = await foodService.randomMenu();
     const message = messageService.getBubble(menu);
     await lineClient.pushMessage(process.env.GROUP_ID, message);
     return res.sendStatus(200);
@@ -58,7 +56,7 @@ app.post("/what-to-eat", async (req, res) => {
     console.error(e);
     await lineClient.broadcast({
       type: "text",
-      text: "ERROR"
+      text: "ERROR",
     });
     return res.sendStatus(400).send(e);
   }
