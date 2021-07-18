@@ -1,7 +1,7 @@
 import { Message } from "@line/bot-sdk";
-import moment from "moment";
+import moment from "moment-timezone";
 
-export class MessageService {
+class MessageService {
   getText = (text: string[]): Message => {
     return { type: "text", text: text.join(" ") };
   };
@@ -80,3 +80,5 @@ export class MessageService {
     };
   };
 }
+
+export const messageService = new MessageService();

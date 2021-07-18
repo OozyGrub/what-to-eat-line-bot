@@ -1,10 +1,12 @@
+import { FoodParams } from "./types/food.d";
 import { Client } from "@line/bot-sdk";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import express from "express";
 import { get } from "lodash";
-import { FoodService } from "./services/food.service";
-import { MessageService } from "./services/message.service";
+import moment from "moment-timezone";
+import { foodService } from "./services/food.service";
+import { messageService } from "./services/message.service";
 
 // Init Express
 const app = express();
@@ -16,8 +18,8 @@ const lineClient = new Client({
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
 });
 
-const foodService = new FoodService();
-const messageService = new MessageService();
+moment.locale("th");
+moment.tz.setDefault("Asia/Bangkok");
 
 // Webhook
 app.post("/webhook", async (req, res) => {
@@ -27,7 +29,7 @@ app.post("/webhook", async (req, res) => {
 
   if (message === "กินไร") {
     try {
-      const menu = await foodService.randomMenu();
+      const menu = await foodService.getRandomMenu();
       const message = messageService.getBubble(menu);
       await lineClient.replyMessage(replyToken, message);
     } catch (e) {
@@ -48,9 +50,16 @@ app.get("/", (req, res) => {
 
 app.post("/what-to-eat", async (req, res) => {
   try {
-    const menu = await foodService.randomMenu();
+    const menu = await foodService.getRandomMenu();
     const message = messageService.getBubble(menu);
-    await lineClient.pushMessage(process.env.GROUP_ID, message);
+
+    // await lineClient.pushMessage(process.env.GROUP_ID, message);
+
+    await lineClient.broadcast({
+      type: "text",
+      text: menu.join(" "),
+    });
+
     return res.sendStatus(200);
   } catch (e) {
     console.error(e);
@@ -60,6 +69,14 @@ app.post("/what-to-eat", async (req, res) => {
     });
     return res.sendStatus(400).send(e);
   }
+});
+
+app.get("/food", async (req, res) => {
+  const excludeRecent = (req.query?.excludeRecent as string) === "true";
+
+  const foods = await foodService.findAll({ excludeRecent });
+
+  return res.send({ length: foods.map((food) => food._rawJson) });
 });
 
 app.listen(port, () => {
