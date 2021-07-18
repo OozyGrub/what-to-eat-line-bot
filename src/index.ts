@@ -40,6 +40,7 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(400).send(e);
     }
   }
+  return res.sendStatus(200);
 });
 
 app.get("/", (req, res) => {
