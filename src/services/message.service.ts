@@ -1,3 +1,4 @@
+import { COMMAND } from "./../types/enums";
 import { Message } from "@line/bot-sdk";
 import moment from "moment-timezone";
 
@@ -82,7 +83,7 @@ class MessageService {
               action: {
                 type: "message",
                 label: "REROLL",
-                text: "#REROLL",
+                text: COMMAND.REROLL,
               },
             },
             {

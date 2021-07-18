@@ -10,6 +10,8 @@ app.post("/webhook", async (req, res) => {
   const message = get(event, ["message", "text"]);
   const replyToken = get(event, "replyToken") as string;
 
+  await lineClient.broadcast({ type: "text", text: JSON.stringify(message) });
+
   try {
     switch (message) {
       case COMMAND.WHAT_TO_EAT: {
