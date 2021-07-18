@@ -22,7 +22,6 @@ const messageService = new MessageService();
 // Webhook
 app.post("/webhook", async (req, res) => {
   const event = get(req, ["body", "events", "0"]);
-  const eventType = get(event, ["message", "type"]);
   const message = get(event, ["message", "text"]);
   const replyToken = get(event, "replyToken") as string;
 
