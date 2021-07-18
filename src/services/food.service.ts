@@ -30,7 +30,7 @@ class FoodService {
     return await qb.all();
   }
 
-  async updateDate(id: string) {
+  private async updateDate(id: string) {
     await this.foodTable.update(id, { date: moment().toISOString() });
   }
 
@@ -42,6 +42,10 @@ class FoodService {
     await Promise.all(sampledFoods.map((food) => this.updateDate(food.id)));
 
     return sampledFoods.map((food) => food.get("name")) as string[];
+  }
+
+  async getRerolledRandomMenu(): Promise<string[]> {
+    return await this.getRandomMenu();
   }
 }
 

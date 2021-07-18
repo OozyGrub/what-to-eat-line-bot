@@ -6,7 +6,7 @@ class MessageService {
     return { type: "text", text: text.join(" ") };
   };
 
-  getBubble = (contents: string[]): Message => {
+  buildFoodMenuMsg = (contents: string[]): Message => {
     return {
       type: "flex",
       altText:
@@ -70,6 +70,28 @@ class MessageService {
               })),
             },
           ],
+        },
+        footer: {
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents: [
+            {
+              type: "button",
+              style: "link",
+              height: "sm",
+              action: {
+                type: "message",
+                label: "REROLL",
+                text: "#REROLL",
+              },
+            },
+            {
+              type: "spacer",
+              size: "sm",
+            },
+          ],
+          flex: 0,
         },
         styles: {
           footer: {
