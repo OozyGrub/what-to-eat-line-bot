@@ -9,8 +9,7 @@ class MessageService {
   buildFoodMenuMsg = (contents: string[]): Message => {
     return {
       type: "flex",
-      altText:
-        "order วันนี้ วัน" + moment().utcOffset(7).locale("th").format("dddd"),
+      altText: "order วันนี้ วัน" + moment().format("dddd"),
       contents: {
         type: "bubble",
         size: "micro",
@@ -27,14 +26,14 @@ class MessageService {
             },
             {
               type: "text",
-              text: moment().utcOffset(7).locale("th").format("dddd Do"),
+              text: moment().format("dddd Do"),
               weight: "bold",
               size: "xxl",
               margin: "md",
             },
             {
               type: "text",
-              text: moment().utcOffset(7).locale("th").format("hh:mm"),
+              text: moment().format("HH:mm"),
               size: "xs",
               color: "#aaaaaa",
               wrap: true,
